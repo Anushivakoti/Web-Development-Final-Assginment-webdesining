@@ -13,8 +13,9 @@ urlpatterns = [
     path('delete_meals/<int:meals_id>', views.delete_meals),
     path('update_meals/<int:meals_id>', views.meals_update_form),
 
-    path('get_category_user', views.show_categories),
-    path('get_food_user', views.show_foods),
+    path('get_catagoery_user', views.show_categories),
+    path('get_meals_user', views.show_meals),
+
 
 
 

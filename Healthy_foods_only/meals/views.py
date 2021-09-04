@@ -136,7 +136,7 @@ def show_categories(request):
     return render(request, 'meals/show_categories.html', context)
 
 def show_meals(request):
-    Meals = Meals.objects.all().order_by('-id')
+    meals = Meals.objects.all().order_by('-id')
     context = {
         'meals':meals,
         'activate_meals_user': 'active'
