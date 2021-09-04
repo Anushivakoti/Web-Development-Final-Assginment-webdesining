@@ -14,7 +14,7 @@ class Meals(models.Model):
     meals_name = models.CharField(max_length=200)
     meals_name = models.FloatField()
     meals_name = models.FileField(upload_to='static/uploads')
-    catagoery = models.ForeignKey(Catagoery,on_delete=models.CASCADE, null=True)
+    catagoery = models.ForeignKey(Catagoery, on_delete=models.CASCADE, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
 

@@ -127,6 +127,23 @@ def meals_update_form(request, meals_id):
     }
     return render(request, 'meals/meals_update_form.html', context)
 
+def show_categories(request):
+    categories = Catagoery.objects.all().order_by('-id')
+    context = {
+        'categories':categories,
+        'activate_catagoery_user': 'active'
+    }
+    return render(request, 'meals/show_categories.html', context)
+
+def show_meals(request):
+    Meals = Meals.objects.all().order_by('-id')
+    context = {
+        'meals':meals,
+        'activate_meals_user': 'active'
+    }
+    return render(request, 'meals/show_meals.html', context)
+
+
 
 
 
