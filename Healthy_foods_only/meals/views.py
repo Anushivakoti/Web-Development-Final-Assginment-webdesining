@@ -143,7 +143,13 @@ def show_meals(request):
     }
     return render(request, 'meals/show_meals.html', context)
 
-
+def menu(request):
+    categories  = Catagoery.objects.all().order_by('-id')
+    context = {
+        'categories':categories,
+        'activate_menu':'active'
+    }
+    return render(request, 'meals/menu.html', context)
 
 
 

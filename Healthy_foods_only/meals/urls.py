@@ -15,6 +15,7 @@ urlpatterns = [
 
     path('get_catagoery_user', views.show_categories),
     path('get_meals_user', views.show_meals),
+    path('menu', views.menu),
 
 
 
