@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import CatagoeryForm, MealsForm
 from django.contrib import messages
 
-from .models import Catagoery, Meals
+from .models import Catagoery, Meals, Cart
 
 from accounts.auth import admin_only, user_only
 from django.contrib.auth.decorators import login_required
@@ -150,6 +150,41 @@ def menu(request):
         'activate_menu':'active'
     }
     return render(request, 'meals/menu.html', context)
+
+
+@login_required
+@user_only
+def add_to_cart(request, meals_id):
+    user = request.user
+    meals = Meals.objects.get(id=meals_id)
+
+    check_item_presence = Cart.objects.filter(user=user, meals=meals)
+    if check_item_presence:
+        messages.add_message(request, messages.ERROR, 'Item is already added.')
+        return redirect('/meals/get_meals_user')
+    else:
+        cart = Cart.objects.create(meals=meals, user=user)
+        if cart:
+            messages.add_message(request, messages.SUCCESS, 'Item added to cart')
+            return redirect('/meals/mycart')
+        else:
+            messages.add_message(request, messages.ERROR, 'Unable to add item to cart')
+
+@login_required
+@user_only
+def show_cart_items(request):
+    user = request.user
+    items = Cart.objects.filter(user= user)
+    context = {
+        'items':items,
+        'activate_my_cart':'active'
+    }
+    return render(request, 'meals/mycart.html', context)
+
+
+
+
+
 
 
 

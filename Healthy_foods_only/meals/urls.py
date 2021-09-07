@@ -16,6 +16,8 @@ urlpatterns = [
     path('get_catagoery_user', views.show_categories),
     path('get_meals_user', views.show_meals),
     path('menu', views.menu),
+    path('add_to_cart/<int:meals_id>',views.add_to_cart),
+    path('mycart', views.show_cart_items),
 
 
 

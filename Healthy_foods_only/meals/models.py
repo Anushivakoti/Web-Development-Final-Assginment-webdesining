@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import *
 from django.core import validators
+from django.contrib.auth.models import User
 
 class Catagoery(models.Model):
     catagoery_name = models.CharField(max_length=200, null= True,validators=[validators.MinLengthValidator(2)])
@@ -20,6 +21,12 @@ class Meals(models.Model):
 
     def __str__(self):
         return self.meals_name
+
+class Cart(models.Model):
+    meals = models.ForeignKey(Meals, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+
 
 
 
