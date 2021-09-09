@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import CatagoeryForm, MealsForm
 from django.contrib import messages
 
-from .models import Catagoery, Meals, Cart
+from .models import Catagoery, Meals, Cart, Order
 
 from accounts.auth import admin_only, user_only
 from django.contrib.auth.decorators import login_required
@@ -180,6 +180,69 @@ def show_cart_items(request):
         'activate_my_cart':'active'
     }
     return render(request, 'meals/mycart.html', context)
+
+@login_required
+@user_only
+def remove_cart_item(request, cart_id):
+    item = Cart.objects.get(id=cart_id)
+    item.delete()
+    messages.add_message(request, messages.SUCCESS, 'Item was deleted successfully from cart')
+    return redirect('/meals/mycart')
+
+
+@login_required
+@user_only
+def order_form(request, meals_id,cart_id):
+    user = request.user
+    meals = meals.objects.get(id=meals_id)
+    cart_item = Cart.objects.get(id=cart_id)
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            quantity = request.POST.get('quantity')
+            price = meals.meals_price
+            total_price = int(quantity)*int(price)
+            contact_no = request.POST.get('contact_no')
+            contact_address = request.POST.get('contact_address')
+            payment_method = request.POST.get('payment_method')
+            order = Order.objects.create(meals=meals,
+                                         user =user,
+                                         quantity=quantity,
+                                         total_price=total_price,
+                                         contact_no = contact_no,
+                                         contact_address =contact_address,
+                                         status="Pending",
+                                         payment_method= payment_method,
+                                         payment_status=False
+            )
+            if order:
+                # messages.add_message(request, messages.SUCCESS, 'Item Ordered. Continue Payment for Verification')
+                # cart_item.delete()
+                context = {
+                    'order':order,
+                    'cart':cart_item
+                }
+                return render(request, 'meals/esewa_payment.html', context)
+        else:
+            messages.add_message(request, messages.ERROR, 'Something went wrong')
+            return render(request, 'meals/order_form.html', {'order_form':form})
+    context = {
+        'order_form': OrderForm
+    }
+    return render(request, 'meals/order_form.html', context)
+
+
+
+# @login_required
+# @user_only
+# def my_order(request):
+#     user = request.user
+#     items = Order.objects.filter(user=user).order_by('-id')
+#     context = {
+#         'items':items,
+#         'activate_myorders':'active'
+#     }
+#     return render(request, 'meals/my_order.html', context)
 
 
 
