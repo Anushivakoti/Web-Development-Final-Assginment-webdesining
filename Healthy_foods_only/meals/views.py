@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CatagoeryForm, MealsForm
+from .forms import CatagoeryForm, MealsForm , OrderForm
 from django.contrib import messages
 
 from .models import Catagoery, Meals, Cart, Order
@@ -169,7 +169,6 @@ def add_to_cart(request, meals_id):
             return redirect('/meals/mycart')
         else:
             messages.add_message(request, messages.ERROR, 'Unable to add item to cart')
-
 @login_required
 @user_only
 def show_cart_items(request):
@@ -180,7 +179,6 @@ def show_cart_items(request):
         'activate_my_cart':'active'
     }
     return render(request, 'meals/mycart.html', context)
-
 @login_required
 @user_only
 def remove_cart_item(request, cart_id):
@@ -188,10 +186,13 @@ def remove_cart_item(request, cart_id):
     item.delete()
     messages.add_message(request, messages.SUCCESS, 'Item was deleted successfully from cart')
     return redirect('/meals/mycart')
-
-
 @login_required
 @user_only
+
+
+
+
+
 def order_form(request, meals_id,cart_id):
     user = request.user
     meals = meals.objects.get(id=meals_id)
@@ -216,8 +217,6 @@ def order_form(request, meals_id,cart_id):
                                          payment_status=False
             )
             if order:
-                # messages.add_message(request, messages.SUCCESS, 'Item Ordered. Continue Payment for Verification')
-                # cart_item.delete()
                 context = {
                     'order':order,
                     'cart':cart_item
@@ -233,16 +232,16 @@ def order_form(request, meals_id,cart_id):
 
 
 
-# @login_required
-# @user_only
-# def my_order(request):
-#     user = request.user
-#     items = Order.objects.filter(user=user).order_by('-id')
-#     context = {
-#         'items':items,
-#         'activate_myorders':'active'
-#     }
-#     return render(request, 'meals/my_order.html', context)
+@login_required
+@user_only
+def my_order(request):
+    user = request.user
+    items = Order.objects.filter(user=user).order_by('-id')
+    context = {
+        'items':items,
+        'activate_myorders':'active'
+    }
+    return render(request, 'meals/my_order.html', context)
 
 
 
