@@ -6,20 +6,11 @@ from django.contrib import messages
 from .forms import LoginForm
 from accounts.auth import unauthenticated_user, admin_only,user_only
 from django.contrib.auth.decorators import login_required
-from meals.models import meals
-
-
-
-
+# from meals.models import meals
 
 
 def homepage(request):
-    meals = Meals.objects.all().order_by('-id')[:3]
-    context = {
-        'meals': meals
-    }
-    return render(request, 'accounts/homepage.html', context)
-
+    return render(request, 'accounts/homepage.html')
 
 @login_required
 def logout_user(request):
