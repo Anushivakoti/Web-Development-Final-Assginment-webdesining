@@ -61,7 +61,7 @@ def catagoery_update_form(request, catagoery_id):
             return redirect("/meals/get_catagoery")
         else:
             messages.add_message(request, messages.ERROR, 'Unable to update catagoery')
-            return render(request, 'meals/catagoery_update_form.html', {'form_catagoery':form})
+            return render(request, 'meals/catagoery_update_form.html', {'catagoery_form':form})
     context ={
         'form_catagoery': CatagoeryForm(instance=catagoery),
         'activate_catagoery': 'active'
@@ -230,7 +230,7 @@ def order_form(request, meals_id, cart_id, meals=None):
     }
     return render(request, 'meals/order_form.html', context)
 
-import request as req
+# import request as req
 def esewa_verify(request):
     import xml.etree.ElementTree as ET
     o_id = request.GET.get('oid')
@@ -243,7 +243,7 @@ def esewa_verify(request):
         'rid': refId,
         'pid': o_id,
     }
-    resp = req.post(url, d)
+    resp = request.post(url, d)
     root = ET.fromstring(resp.content)
     status = root[0].text.strip()
     if status == 'Success':
